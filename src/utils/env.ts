@@ -1,2 +1,2 @@
-export const DATABASE_URL: string = Bun.env.DATABASE_URL || "";
-export const JWT_SECRET: string = Bun.env.JWT_SECRET || "";
+export const DATABASE_URL: string = process.env.DATABASE_URL || "";
+export const JWT_SECRET: string = process.env.JWT_SECRET || "";

@@ -3,7 +3,8 @@
   "builds": [
     {
       "src": "src/index.ts",
-      "use": "@vercel/edge"
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["src/**"] }
     }
   ],
   "routes": [

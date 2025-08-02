@@ -6,6 +6,7 @@ import UserModel, {
 import authValidation from "../validations/auth.validation.js";
 import { generateToken } from "../utils/jwt.js";
 import { Types } from "mongoose";
+import * as bcrypt from "bcrypt";
 
 const register = async (request: RegisterRequest) => {
   const requestValidate: RegisterRequest =
@@ -34,10 +35,11 @@ const register = async (request: RegisterRequest) => {
     fullName: requestValidate.fullName,
     username: requestValidate.username,
     email: requestValidate.email,
-    password: await Bun.password.hash(requestValidate.password, {
-      algorithm: "bcrypt",
-      cost: 10,
-    }),
+    // password: await Bun.password.hash(requestValidate.password, {
+    //   algorithm: "bcrypt",
+    //   cost: 10,
+    // }),
+    password: await bcrypt.hash(requestValidate.password, 10),
   });
 
   return user;
@@ -58,7 +60,12 @@ const login = async (request: LoginRequest) => {
     throw new HTTPException(401, { message: "Invalid u credentials" });
   }
 
-  const validatePassword = await Bun.password.verify(
+  // const validatePassword = await Bun.password.verify(
+  //   requestValidate.password,
+  //   userExist.password
+  // );
+
+  const validatePassword = await bcrypt.compare(
     requestValidate.password,
     userExist.password
   );
