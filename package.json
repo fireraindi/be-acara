@@ -4,14 +4,20 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
+    "@hono/swagger-ui": "^0.5.2",
+    "@hono/zod-openapi": "^1.0.2",
+    "bcryptjs": "^3.0.2",
     "hono": "^4.8.10",
     "mongoose": "^8.17.0",
-    "zod": "^4.0.14"
+    "mustache": "^4.2.0",
+    "nodemailer": "^7.0.5",
+    "zod": "^4.0.14",
+    "zod-to-openapi": "^0.2.1"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/bun": "latest",
-    "@types/mongoose": "^5.11.97"
+    "@types/mongoose": "^5.11.97",
+    "@types/mustache": "^4.2.6",
+    "@types/nodemailer": "^6.4.17"
   }
 }

@@ -3,12 +3,16 @@ import { authController } from "./controllers/auth.controller.js";
 import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
 import { init } from "./app/database.js";
+import { swagger } from "./docs/doc.js";
+import { cors } from "hono/cors";
 
 init();
 
 const app = new Hono();
-app.route("/api", authController);
+app.use("/*", cors());
 
+app.route("/doc", swagger);
+app.route("/api", authController);
 app.get("/", (c) => {
   return c.text("Hello Hono!");
 });

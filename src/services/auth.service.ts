@@ -6,7 +6,7 @@ import UserModel, {
 import authValidation from "../validations/auth.validation.js";
 import { generateToken } from "../utils/jwt.js";
 import { Types } from "mongoose";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 
 const register = async (request: RegisterRequest) => {
   const requestValidate: RegisterRequest =
@@ -69,9 +69,13 @@ const login = async (request: LoginRequest) => {
     requestValidate.password,
     userExist.password
   );
-
+  // console.info(validatePassword)
   if (!validatePassword) {
     throw new HTTPException(401, { message: "Invalid p credentials" });
+  }
+
+  if (!userExist.isActive) {
+    throw new HTTPException(403, { message: "User is not activated" });
   }
 
   const token = await generateToken(userExist);
@@ -89,4 +93,21 @@ const me = async (id: Types.ObjectId) => {
   return user;
 };
 
-export default { register, login, me };
+const activation = async (code: string) => {
+  const requestValidate = authValidation.activationSchema.parse({ code: code });
+  const user = await UserModel.findOneAndUpdate(
+    {
+      activationCode: requestValidate.code,
+    },
+    {
+      isActive: true,
+    },
+    { new: true }
+  );
+
+  if (!user) {
+    throw new HTTPException(404, { message: "User not found" });
+  }
+  return user;
+};
+export default { register, login, me, activation };
